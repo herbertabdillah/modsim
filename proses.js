@@ -1,15 +1,7 @@
-function delay(ms) {
-    var start = Date.now(),
-        now = start;
-    while (now - start < ms) {
-      now = Date.now();
-    }
-}
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 ctx.canvas.height = window.innerHeight;
 ctx.canvas.width = window.innerWidth;
-//ctx.fillStyle = "#FF0000";
 class Bola{
 	constructor(x, y, radius) {
 		this.x  = x;
@@ -31,14 +23,15 @@ class Bola{
 		this.y = this.y + this.vy;
 	}
 }
-//a = new Bola(10, 10, 10);
-//b = new Bola(500, 500, 40);
 
-a = new Bola(10, 200, 10);
-b = new Bola(500, 200, 40);
-function cekTumbukan() {
-
+class Simulasi{
+	constructor(){
+		this.a = '';
+		this.b = '';
+	}
 }
+a = new Bola(10, 200, 10);
+b = new Bola(500, 200, 90);
 function hitung() {
 	a.jalan();
 	b.jalan();
@@ -46,8 +39,6 @@ function hitung() {
 function render() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.beginPath();
-	//ctx.fillRect(a.x, a.y, a.radius, a.radius);
-	//ctx.fillRect(b.x, b.y, b.radius, b.radius);
 	ctx.arc(a.x, a.y, a.radius, 0, 2 * Math.PI);
 	ctx.stroke();
 	ctx.beginPath();
@@ -55,14 +46,7 @@ function render() {
 	ctx.stroke();
 }
 i = 0;
-while(false) {
-	hitung();
-	render();
-	console.log(i);
-	delay(1000);
-	i++;
-	if(i > 5) break;
-}
+
 function deteksiTabrakan(p1x, p1y, r1, p2x, p2y, r2) {
   var a;
   var x;
@@ -140,11 +124,8 @@ function tabrakan() {
        b.vy=(vy2-vy_cm)*R + vy_cm;
 
        return;
-
-
-
 }
-function asdf(i) {
+function loop(i) {
 	if(i > 10000) return;
 	setTimeout(function(){
 		hitung();
@@ -162,4 +143,4 @@ function asdf(i) {
 
 a.dorong(4, 45);
 b.dorong(4, 135);
-asdf(0);
+loop(0);
