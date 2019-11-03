@@ -4,6 +4,7 @@ var ctx = canvas.getContext('2d');
 //ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = 500;
 ctx.canvas.width = 800;
+
 class Bola {
   constructor(x, y, radius) {
     this.x = x;
@@ -35,11 +36,16 @@ function hitung() {
   a.jalan();
   b.jalan();
 }
+
 function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
+
+  // Gambar lingkaran A
   ctx.arc(a.x, a.y, a.radius, 0, 2 * Math.PI);
   ctx.stroke();
+
+  // Gambar lingkaran B
   ctx.beginPath();
   ctx.arc(b.x, b.y, b.radius, 0, 2 * Math.PI);
   ctx.stroke();
@@ -61,41 +67,23 @@ function deteksiTabrakan(p1x, p1y, r1, p2x, p2y, r2) {
     return false;
   }
 }
+
 function tabrakan() {
-  var m21, dvx2, aa, x21, y21, vx21, vy21, fy21, sign, vx_cm, vy_cm;
-  var m1, m2, x1, x2, y1, y2, vx1, vx2, vy1, vy2;
+  var m21, dvx2, grad, x21, y21, vx21, vy21, fy21, sign, vx_cm, vy_cm;
   var R = 1;
-  m1 = a.m;
-  m2 = b.m;
-  x1 = a.x;
-  x2 = b.x;
-  y1 = a.y;
-  y2 = b.y;
-  vx1 = a.vx;
-  vx2 = b.vx;
-  vy1 = a.vy;
-  vy2 = a.vy;
-  m21 = m2 / m1;
-  x21 = x2 - x1;
-  y21 = y2 - y1;
-  vx21 = vx2 - vx1;
-  vy21 = vy2 - vy1;
 
-  vx_cm = (m1 * vx1 + m2 * vx2) / (m1 + m2);
-  vy_cm = (m1 * vy1 + m2 * vy2) / (m1 + m2);
+  m21  = b.m / a.m;
+  x21  = b.x - a.x;
+  y21  = b.y - a.y;
+  vx21 = b.vx - a.vx;
+  vy21 = b.vy - a.vy;
 
-  //     *** return old velocities if balls are not approaching ***
-  if (vx21 * x21 + vy21 * y21 >= 0) return;
+  vx_cm = (a.m * a.vx + b.m * b.vx) / (a.m + b.m);
+  vy_cm = (a.m * a.vy + b.m * b.vy) / (a.m + b.m);
 
-  //     *** I have inserted the following statements to avoid a zero divide;
-  //         (for single precision calculations,
-  //          1.0E-12 should be replaced by a larger value). **************
-
+  //if (vx21 * x21 + vy21 * y21 >= 0) return;
+  // Avoid divide by zero
   fy21 = 1.0e-12 * Math.abs(y21);
-  //if ( fabs(x21)<fy21 ) {
-  //if (x21<0) { sign=-1; } else { sign=1;}
-  //x21=fy21*sign;
-  //}
 
   if (Math.abs(x21) < fy21) {
     if (x21 < 0) {
@@ -105,21 +93,20 @@ function tabrakan() {
     }
     x21 = fy21 * sign;
   }
-  //     ***  update velocities ***
-  aa = y21 / x21;
-  dvx2 = (-2 * (vx21 + aa * vy21)) / ((1 + aa * aa) * (1 + m21));
-  vx2 = vx2 + dvx2;
-  vy2 = vy2 + aa * dvx2;
-  vx1 = vx1 - m21 * dvx2;
-  vy1 = vy1 - aa * m21 * dvx2;
 
-  //     ***  velocity correction for inelastic collisions ***
-  a.vx = (vx1 - vx_cm) * R + vx_cm;
-  a.vy = (vy1 - vy_cm) * R + vy_cm;
-  b.vx = (vx2 - vx_cm) * R + vx_cm;
-  b.vy = (vy2 - vy_cm) * R + vy_cm;
+  // Update kecepatan
+  grad = y21 / x21;
+  dvx2 = (-2 * (vx21 + grad * vy21)) / ((1 + grad * grad) * (1 + m21));
+  b.vx = b.vx + dvx2;
+  b.vy = b.vy + grad * dvx2;
+  a.vx = a.vx - m21 * dvx2;
+  a.vy = a.vy - grad * m21 * dvx2;
 
-  return;
+  // Kecepatan untuk lenting sebagian
+  a.vx = (a.vx - vx_cm) * R + vx_cm;
+  a.vy = (a.vy - vy_cm) * R + vy_cm;
+  b.vx = (b.vx - vx_cm) * R + vx_cm;
+  b.vy = (b.vy - vy_cm) * R + vy_cm;
 }
 var apakahberhenti = false;
 function loop(i) {
