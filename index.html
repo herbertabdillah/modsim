@@ -1,10 +1,29 @@
 <html>
   <head>
+	  <title>Simulasi Tumbukan</title>
   </head>
   <body>
+	  <input type="number" id="xa" placeholder="xa" />
+	  <input type="number" id="ya" placeholder="ya" />
+	  <input type="number" id="ma" placeholder="ma" />
+	  <input type="number" id="xb" placeholder="xb" />
+	  <input type="number" id="yb" placeholder="yb" />
+	  <input type="number" id="mb" placeholder="mb" />
+	  <input type="number" id="va" placeholder="va" />
+	  <input type="number" id="da" placeholder="da" />
+	  <input type="number" id="vb" placeholder="vb" />
+	  <input type="number" id="db" placeholder="db" />
+		<input type="button" value="mulai" onclick="mulai()"/>
+		<input type="button" value="berhenti" onclick="berhenti()"/>
+		<input type="button" value="contoh" onclick="contoh()"/>
+		<p>
+			paramter untuk contoh : 10, 200, 10, 500, 200, 90, 4, 45, 4, 135
+		</p>
 	<div id="canvas-div">
-		<canvas id="canvas"></canvas>
+		<canvas id="canvas" style="border:1px solid #000000;"></canvas>
 	</div>
+	<div id="grafik-s"></div>
+	<div id="grafik-v"></div>
 	<script src="proses.js"></script>
 	<script src="driver.js"></script>
   </body>
