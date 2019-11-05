@@ -13,7 +13,7 @@ class Bola {
     this.vy = 0;
 
     this.v = 0;
-    this.radius = radius;
+    this.radius = 50;
     this.m = radius;
   }
   dorong(v0, sudut) {
@@ -44,11 +44,15 @@ function render() {
   // Gambar lingkaran A
   ctx.arc(a.x, a.y, a.radius, 0, 2 * Math.PI);
   ctx.stroke();
+  ctx.fillStyle = 'red';
+  ctx.fill();
 
   // Gambar lingkaran B
   ctx.beginPath();
   ctx.arc(b.x, b.y, b.radius, 0, 2 * Math.PI);
   ctx.stroke();
+  ctx.fillStyle = 'blue';
+  ctx.fill();
 }
 
 function deteksiTabrakan(p1x, p1y, r1, p2x, p2y, r2) {
@@ -72,9 +76,9 @@ function tabrakan() {
   var m21, dvx2, grad, x21, y21, vx21, vy21, fy21, sign, vx_cm, vy_cm;
   var R = 1;
 
-  m21  = b.m / a.m;
-  x21  = b.x - a.x;
-  y21  = b.y - a.y;
+  m21 = b.m / a.m;
+  x21 = b.x - a.x;
+  y21 = b.y - a.y;
   vx21 = b.vx - a.vx;
   vy21 = b.vy - a.vy;
 
@@ -108,6 +112,7 @@ function tabrakan() {
   b.vx = (b.vx - vx_cm) * R + vx_cm;
   b.vy = (b.vy - vy_cm) * R + vy_cm;
 }
+
 var apakahberhenti = false;
 function loop(i) {
   if (apakahBerhenti) return;
@@ -146,3 +151,25 @@ function loop(i) {
     loop(i + 1);
   }, 100);
 }
+
+function tulisKordinat(canvas, message) {
+  document.getElementById('kordinat').innerHTML = message;
+}
+
+function getKordinat(canvas, evt) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top,
+  };
+}
+
+canvas.addEventListener(
+  'mousemove',
+  function(evt) {
+    var mousePos = getKordinat(canvas, evt);
+    var message = 'Kordinat : ' + mousePos.x + ',' + mousePos.y;
+    tulisKordinat(canvas, message);
+  },
+  false,
+);
