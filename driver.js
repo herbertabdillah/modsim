@@ -30,5 +30,5 @@ function berhenti(){
 }
 function contoh() {
 	apakahBerhenti = false;
-	simulasi(10, 200, 10, 500, 200, 90, 4, 45, 4, 135);
+	simulasi(300, 100, 10, 500, 100, 20, 5, 45, 5, 135);
 }
